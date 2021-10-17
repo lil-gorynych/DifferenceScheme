@@ -15,7 +15,7 @@ public class Main{
 
 //    static double alpha = 0.01;
 //    static double beta = 0.1;
-
+//
     static double alpha = 0.01;
     static double beta = 1;
 
@@ -42,7 +42,7 @@ public class Main{
 
         var nextLayer = new double[xKnotsAmount];
         var prevLayer = new double[xKnotsAmount];
-        printLayer(prevLayer);
+        printLayer(prevLayer, minT);
 
 
         var t = minT;
@@ -76,7 +76,7 @@ public class Main{
 
             if (done) {
                 swap(nextLayer, prevLayer);
-                printLayer(nextLayer);
+                printLayer(nextLayer, t);
             }
         }
     }
@@ -85,12 +85,12 @@ public class Main{
         System.arraycopy(next, 0, prev, 0, next.length);
     }
 
-    private static void printLayer(double[] layer) {
+    private static void printLayer(double[] layer, double t) {
         try {
-            var stringLayer = "";
+            writer.write(t + "");
             for (double value : layer) {
                 //System.out.print(value + " ");
-                writer.write(value + " ");
+                writer.write(";" + value);
             }
             //System.out.println();
             writer.append('\n');
