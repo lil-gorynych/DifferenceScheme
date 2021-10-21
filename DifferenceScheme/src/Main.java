@@ -10,14 +10,14 @@ public class Main{
 //    static double alpha = 0.1;
 //    static double beta = 0.1;
 
-//    static double alpha = 0.1;
+///    static double alpha = 0.1;
 //    static double beta = 1;
-
-//    static double alpha = 0.01;
-//    static double beta = 0.1;
 //
     static double alpha = 0.01;
-    static double beta = 1;
+    static double beta = 0.1;
+//
+//    static double alpha = 0.01;
+//    static double beta = 1;
 
 
 
@@ -62,12 +62,12 @@ public class Main{
 
             //check
             for (int i = 1; i < nextLayer.length - 1; i++) {
-                var valueToCheck = tStep * coef * (nextLayer[i-1] - nextLayer[i+1]);
-                if (valueToCheck > 0 || valueToCheck < -2) {
+                var valueToCheck = check(nextLayer[i], nextLayer[i-1], nextLayer[i+1], xStep);
+                if (tStep * valueToCheck >= 2) {
                     System.out.println("Error happened!");
                     System.out.println("\tOld step: " + tStep);
                     t -= tStep;
-                    tStep = 0.5 * tStep;
+                    tStep = 1 / valueToCheck;
                     System.out.println("\tNew step: " + tStep);
                     done = false;
                     break;
@@ -106,13 +106,12 @@ public class Main{
 
         return current
             - 0.5 * (tStep / xStep) * current * (right - left)
-            - alpha * (tStep / Math.pow(xStep, 3)) * (right - left) * (right - 2 * current + left);
+            - alpha * (tStep / Math.pow(xStep, 3)) * (Math.pow(right - current, 2) - Math.pow(current - left, 2));
     }
 
-    private static void check(double current, double left, double right, double up, double tStep, double xStep) {
-        var val = (up - current) / tStep
-            + 0.5 * current * (right - left) / xStep
-            + alpha * (right - left) * (right - 2 *  current + left) / Math.pow(xStep, 3);
-        System.out.println(val);
+    private static double check(double current, double left, double right, double xStep) {
+        var re = (right - left) * (0.5 / xStep + 2 * alpha / Math.pow(xStep, 3));
+        var im = 1 / xStep + (alpha / Math.pow(xStep, 3)) * (right - 2 * current + left);
+        return Math.sqrt(Math.pow(re, 2) + Math.pow(im, 2));
     }
 }
